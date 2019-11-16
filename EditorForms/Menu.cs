@@ -1,64 +1,123 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Threading;
 
 namespace EditorForms
 {
     public partial class Menu : MaterialSkin.Controls.MaterialForm
     {
+        int vagas = 500;
+        Semaphore pool = new Semaphore(1, 1);
+        string mensagem;
+
         public Menu()
         {
+            OcuparVagaEstacionamento();
+            pool.Release();
             InitializeComponent();
         }
 
         private void btnEntrada1_Click(object sender, EventArgs e)
         {
-            lbEntrada1.Text = "Botão Entrada 1 funcionando.";
+            Thread t1 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+            t1.Start();
+            lbEntrada1.Text = "Botão 1:" + mensagem;
+            //pool.Release();
         }
 
         private void btnEntrada2_Click(object sender, EventArgs e)
         {
-            lbEntrada2.Text = "Botão Entrada 2 funcionando.";
+            Thread t2 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+            t2.Start();
+            lbEntrada2.Text = "Botão 2:" + mensagem;
+            //pool.Release();
         }
 
         private void btnEntrada3_Click(object sender, EventArgs e)
         {
-            lbEntrada3.Text = "Botão Entrada 3 funcionando.";
+            Thread t3 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+            t3.Start();
+            lbEntrada3.Text = "Botão 3: " + mensagem;
         }
 
         private void btnEntrada4_Click(object sender, EventArgs e)
         {
-            lbEntrada4.Text = "Botão Entrada 4 funcionando.";
+            Thread t4 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+            t4.Start();
+            lbEntrada4.Text = "Botão 4:" + mensagem;
         }
 
         private void btnEntrada5_Click(object sender, EventArgs e)
         {
-            lbEntrada5.Text = "Botão Entrada 5 funcionando.";
+            Thread t5 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+            t5.Start();
+            lbEntrada5.Text = " Botão 5:" + mensagem;
         }
 
         private void btnSaida1_Click(object sender, EventArgs e)
         {
-            lbSaida1.Text = "Botão Saida 1 funcionando.";
+            Thread t6 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
+            t6.Start();
+            lbSaida1.Text = " Botão 1:" + mensagem;
+            //pool.Release();
+
         }
 
         private void btnSaida2_Click(object sender, EventArgs e)
         {
-            lbSaida2.Text = "Botão Saida 2 funcionando.";
+            Thread t7 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
+            t7.Start();
+            lbSaida2.Text = " Botão 2:" + mensagem;
         }
 
         private void btnSaida3_Click(object sender, EventArgs e)
         {
-            lbSaida3.Text = "Botão Saida 3 funcionando.";
+            Thread t8 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
+            t8.Start();
+            lbSaida3.Text = " Botão 3:" + mensagem;
         }
 
         private void btnSaida4_Click(object sender, EventArgs e)
         {
-            lbSaida4.Text = "Botão Saida 4 funcionando.";
+            Thread t9 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
+            t9.Start();
+            lbSaida4.Text = " Botão 4:" + mensagem;
         }
 
         private void btnSaida5_Click(object sender, EventArgs e)
         {
-            lbSaida5.Text = "Botão Saida 5 funcionando.";
+            Thread t0 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
+            t0.Start();
+            lbSaida5.Text = " Botão 5:" + mensagem;
+        }
+
+        private void OcuparVagaEstacionamento()
+        {
+            pool.WaitOne();
+            if (vagas > 0)
+            {
+                mensagem = "Este carro ocupou a vaga: " + vagas;
+                vagas--;
+            }
+            else
+            {
+                mensagem = "ESTACIONAMENTO LOTADO.";
+            }
+            pool.Release();
+        }
+
+        private void LiberarVagaEstacionamento()
+        {
+            pool.WaitOne();
+            if (vagas < 500)
+            {
+                vagas++;
+                mensagem = "Obrigada e volte sempre!";
+            }
+            else
+            {
+                mensagem = "Estacionamento vazio.";
+            }
+            pool.Release();
         }
     }
 }
