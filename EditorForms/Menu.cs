@@ -11,8 +11,8 @@ namespace EditorForms
 
         public Menu()
         {
-            OcuparVagaEstacionamento();
-            pool.Release();
+         //   OcuparVagaEstacionamento();
+           // pool.Release();
             InitializeComponent();
         }
 
@@ -20,6 +20,7 @@ namespace EditorForms
         {
             Thread t1 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
             t1.Start();
+            t1.Join();
             lbEntrada1.Text = "Botão 1:" + mensagem;
             //pool.Release();
         }
@@ -28,6 +29,7 @@ namespace EditorForms
         {
             Thread t2 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
             t2.Start();
+            t2.Join();
             lbEntrada2.Text = "Botão 2:" + mensagem;
             //pool.Release();
         }
@@ -36,6 +38,7 @@ namespace EditorForms
         {
             Thread t3 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
             t3.Start();
+            t3.Join();
             lbEntrada3.Text = "Botão 3: " + mensagem;
         }
 
@@ -43,6 +46,7 @@ namespace EditorForms
         {
             Thread t4 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
             t4.Start();
+            t4.Join();
             lbEntrada4.Text = "Botão 4:" + mensagem;
         }
 
@@ -50,6 +54,7 @@ namespace EditorForms
         {
             Thread t5 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
             t5.Start();
+            t5.Join();
             lbEntrada5.Text = " Botão 5:" + mensagem;
         }
 
@@ -57,6 +62,7 @@ namespace EditorForms
         {
             Thread t6 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
             t6.Start();
+            t6.Join();
             lbSaida1.Text = " Botão 1:" + mensagem;
             //pool.Release();
 
@@ -66,6 +72,7 @@ namespace EditorForms
         {
             Thread t7 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
             t7.Start();
+            t7.Join();
             lbSaida2.Text = " Botão 2:" + mensagem;
         }
 
@@ -73,6 +80,7 @@ namespace EditorForms
         {
             Thread t8 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
             t8.Start();
+            t8.Join();
             lbSaida3.Text = " Botão 3:" + mensagem;
         }
 
@@ -80,6 +88,7 @@ namespace EditorForms
         {
             Thread t9 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
             t9.Start();
+            t9.Join();
             lbSaida4.Text = " Botão 4:" + mensagem;
         }
 
@@ -87,6 +96,7 @@ namespace EditorForms
         {
             Thread t0 = new Thread(new ThreadStart(LiberarVagaEstacionamento));
             t0.Start();
+            t0.Join();
             lbSaida5.Text = " Botão 5:" + mensagem;
         }
 
