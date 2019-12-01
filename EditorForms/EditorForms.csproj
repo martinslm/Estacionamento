@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Estacionamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Estacionamento.Designer.cs">
+      <DependentUpon>Estacionamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -57,6 +63,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vaga.cs" />
+    <EmbeddedResource Include="Estacionamento.resx">
+      <DependentUpon>Estacionamento.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
