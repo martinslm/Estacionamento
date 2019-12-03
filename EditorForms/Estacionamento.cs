@@ -8,7 +8,6 @@ namespace EditorForms
     public partial class Estacionamento : MaterialSkin.Controls.MaterialForm
     {
         Semaphore pool = new Semaphore(1, 1);
-        string mensagem;
         string vagasOcupadas = string.Empty;
         string resultVagasLiberadas = string.Empty;
         private IList<int> vagasLiberar = new List<int>();
@@ -62,7 +61,7 @@ namespace EditorForms
 
             if (!vagas.Where(v => v.Ocupada == false).Any())
             {
-                mensagem = "ESTACIONAMENTO LOTADO.";
+                vagasOcupadas += "ESTACIONAMENTO LOTADO.";
                 pool.Release();
                 return;
             }
@@ -80,13 +79,20 @@ namespace EditorForms
         private void btnSaida_Click(object sender, EventArgs e)
         {
             string[] vagasSaida = tbSaida.Text.Split(',');
+            var qtdVagasSaida = vagasSaida.Count();
+
+            if (qtdVagasSaida > 5)
+            {
+                lbRetornoSaida.Text = string.Format("Você informou um total de {0} carros para sair, \nporém, nosso estacionamento possui somente 5 cancelas. \nTente novamente :(", qtdVagasSaida);
+                return;
+            }
 
             foreach (var vetor in vagasSaida)
             {
                 vagasLiberar.Add(Convert.ToInt32(vetor));
             }
 
-            for(int i = vagasSaida.Count(); i>0; i--)
+            for(int i = qtdVagasSaida; i>0; i--)
             {
                 Thread t1 = new Thread(new ThreadStart(DesocuparVagasEstacionamento));
                 t1.Start();
