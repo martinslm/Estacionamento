@@ -33,26 +33,33 @@ namespace EditorForms
         {
             int vagasEntrar;
 
-            vagasEntrar = Int32.Parse(TbQtdEntrada.Text);
-
-           if (vagasEntrar > 5)
-           {
-                lbErroEntrada.Text = "VALOR INVÁLIDO. O valor deve ser menor que 5.";
-                return;
-           }
-
-            while (vagasEntrar > 0)
+            try
             {
-                Thread t1 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
-                t1.Start();
-                t1.Join();
+                vagasEntrar = Int32.Parse(TbQtdEntrada.Text);
 
-                vagasEntrar--;
+                if (vagasEntrar > 5 || vagasEntrar == 0)
+                {
+                    lbErroEntrada.Text = "VALOR INVÁLIDO. O valor deve ser menor ou igual a 5 e maior que 0.";
+                    return;
+                }
+
+                while (vagasEntrar > 0)
+                {
+                    Thread t1 = new Thread(new ThreadStart(OcuparVagaEstacionamento));
+                    t1.Start();
+                    t1.Join();
+
+                    vagasEntrar--;
+                }
+
+                lbVagasOcupadas.Text = string.Format("Vagas Ocupadas: {0}", vagasOcupadas.Remove(vagasOcupadas.Length - 1));
+                AtualizarLabelVagas();
+                vagasOcupadas = string.Empty;
             }
-
-            lbVagasOcupadas.Text = string.Format("Vagas Ocupadas: {0}", vagasOcupadas.Remove(vagasOcupadas.Length - 1));
-            AtualizarLabelVagas();
-            vagasOcupadas = string.Empty;
+            catch
+            {
+                lbVagasOcupadas.Text = "Houve um erro ao realizar a operação. Tente novamente.";
+            }
         }
 
         private void OcuparVagaEstacionamento()
@@ -79,29 +86,37 @@ namespace EditorForms
         private void btnSaida_Click(object sender, EventArgs e)
         {
             string[] vagasSaida = tbSaida.Text.Split(',');
-            var qtdVagasSaida = vagasSaida.Count();
 
-            if (qtdVagasSaida > 5)
+            try
             {
-                lbRetornoSaida.Text = string.Format("Você informou um total de {0} carros para sair, \nporém, nosso estacionamento possui somente 5 cancelas. \nTente novamente :(", qtdVagasSaida);
-                return;
-            }
+                var qtdVagasSaida = vagasSaida.Count();
 
-            foreach (var vetor in vagasSaida)
+                if (qtdVagasSaida > 5)
+                {
+                    lbRetornoSaida.Text = string.Format("Você informou um total de {0} carros para sair, \nporém, nosso estacionamento possui somente 5 cancelas. \nTente novamente :(", qtdVagasSaida);
+                    return;
+                }
+
+                foreach (var vetor in vagasSaida)
+                {
+                    vagasLiberar.Add(Convert.ToInt32(vetor));
+                }
+
+                for (int i = qtdVagasSaida; i > 0; i--)
+                {
+                    Thread t1 = new Thread(new ThreadStart(DesocuparVagasEstacionamento));
+                    t1.Start();
+                    t1.Join();
+                }
+
+                lbRetornoSaida.Text = resultVagasLiberadas;
+                AtualizarLabelVagas();
+                resultVagasLiberadas = string.Empty;
+            }
+            catch
             {
-                vagasLiberar.Add(Convert.ToInt32(vetor));
+                 lbRetornoSaida.Text = "Houve um erro ao realizar a operação. Tente novamente.";
             }
-
-            for(int i = qtdVagasSaida; i>0; i--)
-            {
-                Thread t1 = new Thread(new ThreadStart(DesocuparVagasEstacionamento));
-                t1.Start();
-                t1.Join();
-            }
-
-            lbRetornoSaida.Text = resultVagasLiberadas;
-            AtualizarLabelVagas();
-            resultVagasLiberadas = string.Empty;
         }
 
         private void DesocuparVagasEstacionamento()
